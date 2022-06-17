@@ -1,0 +1,15 @@
+<div>
+    <div><%= ms_to_hms(@marker.at) %></div>
+
+    <%= if @editing? do %>
+        <form phx-submit="save" phx-target={@myself}>
+            <input type="text" name="name" value={@marker.name}>
+            <input type="submit">
+        </form>
+    <% else %>
+        <div><%= @marker.name %></div>
+        <button phx-click="edit" phx-target={@myself}>Edit</button>
+        <button phx-click="delete" phx-target={@myself} data-confirm="Are you sure?">Delete</button>
+    <% end %>
+
+</div>

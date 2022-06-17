@@ -17,7 +17,10 @@ defmodule StamprWeb.Router do
   scope "/", StamprWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", EpisodesLive, :index
+    live "/:id", EpisodeLive, :show
+
+    get "/:id/download", EpisodeController, :download
   end
 
   # Other scopes may use custom stacks.

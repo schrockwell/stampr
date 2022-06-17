@@ -26,9 +26,27 @@ defmodule Stampr.Episode do
   end
 
   def update(episode, changes) do
-    changes = Map.take(changes, [:name])
+    changes = clean_changes(changes)
+
     Map.merge(episode, changes)
   end
+
+  defp clean_changes(changes) do
+    changes = Map.take(changes, [:name])
+
+    changes
+    |> Enum.map(fn {k, v} -> {k, clean_change(k, v)} end)
+    |> Map.new()
+  end
+
+  defp clean_change(:name, name) do
+    case String.trim(name) do
+      "" -> "Untitled"
+      name -> name
+    end
+  end
+
+  defp clean_change(_, value), do: value
 
   def start(%__MODULE__{started_at: nil} = episode) do
     %{episode | started_at: now_ms()}
@@ -47,9 +65,9 @@ defmodule Stampr.Episode do
   def add_marker_now(%__MODULE__{started_at: nil} = episode, _attrs), do: episode
 
   def add_marker_now(episode, attrs) do
-    new_marker = %Marker{at: now_ms() - episode.started_at} |> Map.merge(attrs)
+    new_marker = attrs |> Map.merge(%{at: now_ms() - episode.started_at}) |> Marker.new()
 
-    %{episode | markers: [new_marker | episode.markers]}
+    %{episode | markers: episode.markers ++ [new_marker]}
   end
 
   def update_marker(episode, marker, changes) do
@@ -76,7 +94,8 @@ defmodule Stampr.Episode do
   def to_aiff(episode) do
     sample_rate = 1
     sample_size = 16
-    duration_ms = episode.stopped_at - episode.started_at
+    stopped_at = episode.stopped_at || now_ms()
+    duration_ms = stopped_at - episode.started_at
     num_sample_frames = ms_to_frames(duration_ms, sample_rate)
 
     aiff_markers =

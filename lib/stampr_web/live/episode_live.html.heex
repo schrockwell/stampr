@@ -1,0 +1,18 @@
+<%= live_component EpisodeNameComponent, id: "episode-name", episode: @episode %>
+<div>Created <%= @episode.created_at %></div>
+
+<%= if @started? do %>
+    <div><%= ms_to_hms(@now - @episode.started_at) %></div>
+    <%= if @markers == [] do %>
+        <div>No markers</div>
+    <% end %>
+
+    <%= for marker <- @markers do %>
+        <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker %>
+    <% end %>
+
+    <button phx-click="add-marker">Add marker</button>
+    <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id) %>
+<% else %>
+    <button phx-click="start">Start</button>
+<% end %>

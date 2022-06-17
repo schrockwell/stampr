@@ -94,6 +94,7 @@ defmodule StamprWeb do
       import Phoenix.View
 
       import StamprWeb.ErrorHelpers
+      import StamprWeb.Format
       alias StamprWeb.Router.Helpers, as: Routes
     end
   end

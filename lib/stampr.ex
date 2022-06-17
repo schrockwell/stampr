@@ -25,6 +25,21 @@ defmodule Stampr do
   end
 
   @doc """
+  Gets an episode by ID. Returns nil if it doesn't exist.
+  """
+  def get_episode(id) do
+    with_table(fn ->
+      @table_name
+      |> :dets.match({id, :"$1"})
+      |> List.flatten()
+      |> case do
+        [] -> nil
+        [ep] -> ep
+      end
+    end)
+  end
+
+  @doc """
   Creates a new episode.
   """
   def create_episode(attrs \\ []) do

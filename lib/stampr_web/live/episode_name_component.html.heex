@@ -1,0 +1,11 @@
+<div>
+    <%= if @editing? do %>
+        <form phx-submit="save" phx-target={@myself}>
+            <input type="text" name="name" value={@episode.name}>
+            <input type="submit">
+        </form>
+    <% else %>
+        <%= @episode.name %>
+        <button phx-click="edit" phx-target={@myself}>Edit</button>
+    <% end %>
+</div>

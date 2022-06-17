@@ -1,0 +1,9 @@
+<%= if @episodes == [] do %>
+    <div>No episodes</div>
+<% end %>
+
+<%= for episode <- @episodes do %>
+    <%= link episode.name, to: Routes.episode_path(@socket, :show, episode.id) %>
+<% end %>
+
+<button phx-click="create-episode">Add an episode</button>
