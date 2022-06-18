@@ -1,18 +1,34 @@
-<%= live_component EpisodeNameComponent, id: "episode-name", episode: @episode %>
-<div>Created <%= @episode.created_at %></div>
+<div class="my-4 flex space-x-4">
+    <%= link "←", to: Routes.episodes_path(@socket, :index), class: "w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl text-gray-500 hover:bg-gray-100" %>
+    <div class="bg-white flex-grow rounded-full flex items-center px-6">
+        <%= live_component EpisodeNameComponent, id: "episode-name", episode: @episode %>
+    </div>
+</div>
 
-<%= if @started? do %>
-    <div><%= ms_to_hms(@now - @episode.started_at) %></div>
-    <%= if @markers == [] do %>
-        <div>No markers</div>
+<div class="my-4 flex space-x-4">
+    <div class="bg-white rounded-full px-6 py-2 text-xl flex items-center justify-center text-gray-600 font-mono">
+        <%= elapsed(@episode, @now) %>
+    </div>
+    <%= if @started? do %>
+        <button phx-click="add-marker" class="rounded-full bg-white btn" phx-value-name="Marker">Marker</button>
+        <button phx-click="add-marker" class="rounded-full bg-white btn" phx-value-name="Transition">Transition</button>
+    <% else %>
+        <button phx-click="start" class="rounded-full bg-white btn">Start</button>
     <% end %>
+</div>
 
-    <%= for marker <- @markers do %>
-        <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker %>
+
+<div class="bg-white rounded-2xl shadow-lg my-4">
+    <%= if @started? do %>
+        <%= if @markers == [] do %>
+            <div class="py-8 text-muted italic text-center">No markers</div>
+        <% end %>
+
+        <%= for marker <- @markers do %>
+            <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker %>
+        <% end %>
+
+        <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id) %>
+    <% else %>
     <% end %>
-
-    <button phx-click="add-marker">Add marker</button>
-    <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id) %>
-<% else %>
-    <button phx-click="start">Start</button>
-<% end %>
+</div>

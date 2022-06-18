@@ -12,4 +12,12 @@ defmodule StamprWeb.Format do
     |> Enum.map(&String.pad_leading(to_string(&1), 2, "0"))
     |> Enum.join(":")
   end
+
+  def date(datetime) do
+    Timex.format!(datetime, "{WDfull}, {Mfull} {D}, {YYYY}")
+  end
+
+  def pluralize(count, single), do: pluralize(count, single, single <> "s")
+  def pluralize(1, single, _plural), do: single
+  def pluralize(_, _single, plural), do: plural
 end

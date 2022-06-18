@@ -45,7 +45,8 @@ defmodule Stampr.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:uuid, "~> 1.1"},
-      {:tailwind, "~> 0.1.6", runtime: Mix.env() == :dev}
+      {:tailwind, "~> 0.1.6", runtime: Mix.env() == :dev},
+      {:timex, "~> 3.0"}
     ]
   end
 

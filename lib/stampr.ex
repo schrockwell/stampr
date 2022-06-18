@@ -20,7 +20,7 @@ defmodule Stampr do
       @table_name
       |> :dets.match({:_, :"$1"})
       |> List.flatten()
-      |> Enum.sort_by(& &1.created_at, DateTime)
+      |> Enum.sort_by(& &1.created_at, {:desc, DateTime})
     end)
   end
 

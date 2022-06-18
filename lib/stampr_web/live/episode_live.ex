@@ -22,8 +22,9 @@ defmodule StamprWeb.EpisodeLive do
     {:noreply, assign_episode(socket, episode: episode)}
   end
 
-  def handle_event("add-marker", _, socket) do
-    episode = Stampr.add_episode_marker(socket.assigns.episode)
+  def handle_event("add-marker", params, socket) do
+    name = params["name"] || "Marker"
+    episode = Stampr.add_episode_marker(socket.assigns.episode, %{name: name})
 
     {:noreply, assign_episode(socket, episode: episode)}
   end
@@ -50,5 +51,14 @@ defmodule StamprWeb.EpisodeLive do
 
   defp assign_now(socket) do
     assign(socket, :now, System.monotonic_time(:millisecond))
+  end
+
+
+  defp elapsed(%{started_at: nil} = episode, _now) do
+    ms_to_hms(0)
+  end
+
+  defp elapsed(episode, now) do
+    ms_to_hms(now - episode.started_at)
   end
 end
