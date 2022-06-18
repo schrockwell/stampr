@@ -16,7 +16,8 @@ config :stampr, StamprWeb.Endpoint,
   secret_key_base: "6WT2LwV2CzAc3l3ajQS1Nd4EPMYSuYKhDKE9NLMGpl7+f5o1cLI5TLK87A1A+nL4",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 # ## SSL Support

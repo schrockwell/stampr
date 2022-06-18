@@ -44,7 +44,8 @@ defmodule Stampr.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:tailwind, "~> 0.1.6", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -57,7 +58,7 @@ defmodule Stampr.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
 end
