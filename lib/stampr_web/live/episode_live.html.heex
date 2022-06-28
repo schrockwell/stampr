@@ -27,15 +27,14 @@
     <div>
         <%= if @started? do %>
             <%= if @markers == [] do %>
-                <div class="py-8 text-muted italic text-center">No markers yet</div>
+                <div class="py-8 text-muted italic text-center border-b">No markers yet</div>
             <% end %>
 
-            <%= for marker <- @markers do %>
-                <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker %>
+            <%= for {marker, index} <- Enum.with_index(@markers) do %>
+                <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker, selected?: index == @selected_index %>
             <% end %>
 
-            <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id) %>
-        <% else %>
+            <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id), class: "btn inline-block px-8 py-4" %>
         <% end %>
     </div>
 </div>

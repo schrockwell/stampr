@@ -8,6 +8,7 @@ defmodule StamprWeb.EpisodeLive do
     socket =
       socket
       |> assign(:episode_id, id)
+      |> assign(:selected_index, 0)
       |> assign_episode()
       |> assign_now()
 
@@ -24,25 +25,33 @@ defmodule StamprWeb.EpisodeLive do
   def handle_event("add-marker", params, socket) do
     name = params["name"] || "Marker"
     episode = Stampr.add_episode_marker(socket.assigns.episode, %{name: name})
-    {:noreply, assign_episode(socket, episode: episode)}
+    {:noreply, socket |> assign_episode(episode: episode) |> assign(:selected_index, 0)}
   end
 
   def handle_event("keydown", %{"key" => "m"}, socket) do
     episode = Stampr.add_episode_marker(socket.assigns.episode, %{name: "Marker"})
-    {:noreply, assign_episode(socket, episode: episode)}
+    {:noreply, socket |> assign_episode(episode: episode) |> assign(:selected_index, 0)}
   end
 
   def handle_event("keydown", %{"key" => "t"}, socket) do
     episode = Stampr.add_episode_marker(socket.assigns.episode, %{name: "Transition"})
-    {:noreply, assign_episode(socket, episode: episode)}
+    {:noreply, socket |> assign_episode(episode: episode) |> assign(:selected_index, 0)}
   end
 
-  def handle_event("keydown", _, socket) do
+  def handle_event("keydown", %{"key" => key}, socket) when key in ["j", "ArrowDown"] do
+    {:noreply, change_selected_index(socket, 1)}
+  end
+
+  def handle_event("keydown", %{"key" => key}, socket) when key in ["k", "ArrowUp"] do
+    {:noreply, change_selected_index(socket, -1)}
+  end
+
+  def handle_event("keydown", %{"key" => _key}, socket) do
     {:noreply, socket}
   end
 
   def handle_info({_, :episode_updated}, socket) do
-    {:noreply, assign_episode(socket)}
+    {:noreply, socket |> assign_episode() |> change_selected_index()}
   end
 
   def handle_info(:tick, socket) do
@@ -67,4 +76,14 @@ defmodule StamprWeb.EpisodeLive do
 
   defp elapsed(%{started_at: nil}, _now), do: ms_to_hms(0)
   defp elapsed(episode, now), do: ms_to_hms(now - episode.started_at)
+
+  defp change_selected_index(socket, delta \\ 0) do
+    next_index =
+      max(
+        min(socket.assigns.selected_index + delta, length(socket.assigns.episode.markers) - 1),
+        0
+      )
+
+    assign(socket, :selected_index, next_index)
+  end
 end

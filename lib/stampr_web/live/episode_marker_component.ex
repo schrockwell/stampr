@@ -24,4 +24,7 @@ defmodule StamprWeb.EpisodeMarkerComponent do
 
     {:noreply, socket |> assign(:editing?, false)}
   end
+
+  defp selected_class(false), do: nil
+  defp selected_class(true), do: "border-blue-500"
 end

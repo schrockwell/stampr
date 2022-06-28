@@ -1,15 +1,18 @@
-<div class="flex items-center border-b">
-    <div class="font-mono text-xl text-gray-600 px-8 py-4"><%= ms_to_hms(@marker.at) %></div>
 
-    <div class="px-8 py-4 flex flex-grow items-center space-x-4 border-l">
-        <%= if @editing? do %>
-            <form phx-submit="save" phx-target={@myself} class="w-full flex space-x-4">
-                <input type="text" name="name" value={@marker.name} class="flex-grow block" phx-hook="SelectOnMount" id={"markder-#{@marker.id}-name"}>
-                <input type="submit" class="btn" value="Save">
-            </form>
-        <% else %>
-            <div class="flex-grow text-lg cursor-text border-b border-transparent hover:border-gray-300" phx-click="edit" phx-target={@myself}><%= @marker.name %></div>
-            <button phx-click="delete" class="btn" phx-target={@myself} data-confirm="Are you sure?">Delete</button>
-        <% end %>
+    <div class="flex items-center border-b">
+        <div class={["border-l-8 border-transparent", selected_class(@selected?)]}>
+            <div class="font-mono text-xl text-gray-600 pl-6 pr-8 py-4"><%= ms_to_hms(@marker.at) %></div>
+        </div>
+
+        <div class="px-8 py-4 flex flex-grow items-center space-x-4 border-l">
+            <%= if @editing? do %>
+                <form phx-submit="save" phx-target={@myself} class="w-full flex space-x-4">
+                    <input type="text" name="name" value={@marker.name} class="flex-grow block" phx-hook="SelectOnMount" id={"markder-#{@marker.id}-name"}>
+                    <input type="submit" class="btn" value="Save">
+                </form>
+            <% else %>
+                <div class="flex-grow text-lg cursor-text border-b border-transparent hover:border-gray-300" phx-click="edit" phx-target={@myself}><%= @marker.name %></div>
+                <button phx-click="delete" class="btn" phx-target={@myself} data-confirm="Are you sure?">Delete</button>
+            <% end %>
+        </div>
     </div>
-</div>
