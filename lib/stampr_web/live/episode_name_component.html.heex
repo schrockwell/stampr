@@ -2,10 +2,9 @@
     <%= if @editing? do %>
         <form phx-submit="save" phx-target={@myself} class="w-full flex space-x-4">
             <input type="text" name="name" value={@episode.name} class="flex-grow px-2 py-1" phx-hook="SelectOnMount" id="episode-name-input">
-            <input type="submit" class="text-flamingo-600" value="Save">
+            <input type="submit" class="text-flamingo-600 cursor-pointer" value="Save">
         </form>
     <% else %>
-        <div class="text-xl font-medium flex-grow"><%= @episode.name %></div>
-        <button class="text-flamingo-600" phx-click="edit" phx-target={@myself}>Rename</button>
+        <div class="text-xl font-medium flex-grow cursor-text border-b border-transparent hover:border-gray-300" phx-click="edit" phx-target={@myself}><%= @episode.name %></div>
     <% end %>
 </div>

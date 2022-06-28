@@ -5,11 +5,15 @@
 /* This file is for your main application CSS */
 
 .btn {
-  @apply bg-flamingo-100 text-flamingo-700 rounded-full text-center w-full p-4 transition-all;
+  @apply bg-white text-flamingo-600 rounded-md text-center transition-all cursor-pointer font-medium;
 }
 
 .btn:hover {
-  @apply bg-flamingo-200;
+  @apply border-flamingo-600 text-flamingo-700;
+}
+
+kbd {
+  @apply border border-gray-400 rounded text-gray-400 inline px-1 font-sans text-xs;
 }
 
 /* Alerts and form errors used by phx.new */

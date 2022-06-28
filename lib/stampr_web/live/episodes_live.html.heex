@@ -1,5 +1,5 @@
 <div class="bg-white rounded-2xl shadow-lg my-8">
-    <div class="p-4">
+    <div class="px-8 py-6">
         <button class="btn" phx-click="create-episode">Add an Episode</button>
     </div>
 
@@ -8,8 +8,8 @@
     <% end %>
 
     <%= for episode <- @episodes do %>
-        <div class="px-4 pb-4">
-            <%= link to: Routes.episode_path(@socket, :show, episode.id), class: "border border-gray-300 rounded-lg p-4 block flex items-center hover:bg-gray-100 transition-colors" do %>
+        <div>
+            <%= link to: Routes.episode_path(@socket, :show, episode.id), class: "flex items-center hover:bg-gray-100 transition-colors px-8 py-6 border-t" do %>
                 <div class="flex-grow">
                     <div class="text-xl font-medium"><%= episode.name %></div>
                     <div class="text-gray-500">

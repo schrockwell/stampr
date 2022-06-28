@@ -1,34 +1,41 @@
-<div class="my-4 flex space-x-4">
-    <%= link "←", to: Routes.episodes_path(@socket, :index), class: "w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl text-gray-500 hover:bg-gray-100" %>
-    <div class="bg-white flex-grow rounded-full flex items-center px-6">
-        <%= live_component EpisodeNameComponent, id: "episode-name", episode: @episode %>
+<div class="bg-white rounded-2xl shadow-lg my-8" phx-window-keydown="keydown">
+    <div class="flex px-8 py-4 border-b">
+        <%= link "←", to: Routes.episodes_path(@socket, :index), class: "w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl text-gray-500 hover:bg-gray-100" %>
+        <div class="bg-white flex-grow rounded-full flex items-center px-6">
+            <%= live_component EpisodeNameComponent, id: "episode-name", episode: @episode %>
+        </div>
     </div>
-</div>
 
-<div class="my-4 flex space-x-4">
-    <div class="bg-white rounded-full px-6 py-2 text-xl flex items-center justify-center text-gray-600 font-mono">
-        <%= elapsed(@episode, @now) %>
+    <div class="flex border-b items-center">
+        <%= if @started? do %>
+            <div class="px-8 py-4 text-xl flex items-center justify-center text-flamingo-600 font-mono border-r">
+                <span class="uppercase px-2 py-1 rounded-lg bg-flamingo-500 text-white mr-4">On Air</span>
+                <%= elapsed(@episode, @now) %>
+            </div>
+            <div class="px-8 py-4 flex-grow space-x-8">
+                <button phx-click="add-marker" class="rounded-full bg-white btn" phx-value-name="Marker">Add Marker <kbd class="ml-1">M</kbd></button>
+                <button phx-click="add-marker" class="rounded-full bg-white btn" phx-value-name="Transition">Add Transition <kbd class="ml-1">T</kbd></button>
+            </div>
+        <% else %>
+            <div class="px-8 py-4 flex items-center">
+                <button phx-click="start" class="rounded-full bg-white btn">Start Recording</button>
+            </div>
+        <% end %>
     </div>
-    <%= if @started? do %>
-        <button phx-click="add-marker" class="rounded-full bg-white btn" phx-value-name="Marker">Marker</button>
-        <button phx-click="add-marker" class="rounded-full bg-white btn" phx-value-name="Transition">Transition</button>
-    <% else %>
-        <button phx-click="start" class="rounded-full bg-white btn">Start</button>
-    <% end %>
-</div>
 
 
-<div class="bg-white rounded-2xl shadow-lg my-4">
-    <%= if @started? do %>
-        <%= if @markers == [] do %>
-            <div class="py-8 text-muted italic text-center">No markers</div>
+    <div>
+        <%= if @started? do %>
+            <%= if @markers == [] do %>
+                <div class="py-8 text-muted italic text-center">No markers yet</div>
+            <% end %>
+
+            <%= for marker <- @markers do %>
+                <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker %>
+            <% end %>
+
+            <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id) %>
+        <% else %>
         <% end %>
-
-        <%= for marker <- @markers do %>
-            <%= live_component EpisodeMarkerComponent, id: "episode-marker-#{marker.id}", episode: @episode, marker: marker %>
-        <% end %>
-
-        <%= link "Download AIFF", to: Routes.episode_path(@socket, :download, @episode.id) %>
-    <% else %>
-    <% end %>
+    </div>
 </div>
